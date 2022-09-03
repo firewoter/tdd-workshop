@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoFixture.Xunit2;
 using Bogus;
 using FsCheck.Xunit;
 using TddWorkshop.Domain.InstantCredit;
 using TddWorkshop.Domain.Tests.Arbitraries;
 using TddWorkshop.Domain.Tests.Extensions;
+using TddWorkshop.Domain.Tests.Mocks;
 using Xunit;
 using static TddWorkshop.Domain.InstantCredit.CreditGoal;
 using static TddWorkshop.Domain.InstantCredit.Employment;
@@ -15,11 +18,17 @@ namespace TddWorkshop.Domain.Tests;
 
 public class CreditCalculatorTests
 {
-    [Fact(Skip = "Implement on Step 1")]
-    public void Calculate_IsApproved_PointsCalculatedCorrectly()
-    //CalculateCreditRequest request, bool hasCriminalRecord, int points)
+    // [Fact(Skip = "Implement on Step 1")]
+    // [Fact]
+    [Theory]
+    [ClassData(typeof(CreditCalculatorTestData))]
+    public async Task Calculate_PointsCalculatedCorrectly(CalculateCreditRequest request, bool hasCriminalRecord, int points)
     {
-        throw new NotImplementedException();
+        var creditCalculator = new CreditCalculator(new CriminalRecordCheckerMock(hasCriminalRecord));
+        var result = await creditCalculator.CalculateAsync(request);
+        
+        Assert.True(result.IsApproved);
+        Assert.Equal(points, result.Points);
     }
 }
 
