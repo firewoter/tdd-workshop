@@ -22,13 +22,20 @@ public class CreditCalculatorTests
     // [Fact]
     [Theory]
     [ClassData(typeof(CreditCalculatorTestData))]
-    public async Task Calculate_PointsCalculatedCorrectly(CalculateCreditRequest request, bool hasCriminalRecord, int points)
+    public void Calculate_PointsCalculatedCorrectly(CalculateCreditRequest request, bool hasCriminalRecord, int points)
     {
-        var creditCalculator = new CreditCalculator(new CriminalRecordCheckerMock(hasCriminalRecord));
-        var result = await creditCalculator.CalculateAsync(request);
+        var creditCalculator = new CreditCalculator();
+        var result = creditCalculator.Calculate(request, hasCriminalRecord);
         
-        Assert.True(result.IsApproved);
         Assert.Equal(points, result.Points);
+    }
+    
+    [Theory]
+    [AutoData]
+    public void Calculate_AutoData_NoException(CalculateCreditRequest request, bool hasCriminalRecord, int points)
+    {
+        var creditCalculator = new CreditCalculator();
+        var result = creditCalculator.Calculate(request, hasCriminalRecord);
     }
 }
 
