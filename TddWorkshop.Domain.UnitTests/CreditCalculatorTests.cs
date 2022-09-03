@@ -37,6 +37,26 @@ public class CreditCalculatorTests
         var creditCalculator = new CreditCalculator();
         var result = creditCalculator.Calculate(request, hasCriminalRecord);
     }
+
+    [Property(Arbitrary = new [] {typeof(PostiveArbitraries)}) ]
+    public bool Calculate_IsApproved_PointsGreaterThan80(CalculateCreditRequest request, bool hasCriminalRecord)
+    {
+        var res = new CreditCalculator().Calculate(request, hasCriminalRecord);
+        return res.IsApproved == res.Points >= 80;
+    }
+    
+    [Property]
+    public bool Calculate_InterestRateCalculatedCorrectly(CalculateCreditRequest request, bool hasCriminalRecord)
+    {
+        var response = new CreditCalculator().Calculate(request, hasCriminalRecord);
+        if (!response.IsApproved)
+        {
+            return response.Points < 80;
+        }
+
+        var rate = response.Points.ToInterestRate();
+        return response.InterestRate == rate;
+    }
 }
 
 public class CreditCalculatorTestData : IEnumerable<object[]>
