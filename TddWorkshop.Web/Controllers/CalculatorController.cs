@@ -6,10 +6,10 @@ namespace TddWorkshop.Web.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CalculatorController //: MediatRControllerBase
+public class CalculatorController : MediatRControllerBase
 {
     [HttpPost(nameof(Calculate))]
     public Task<CalculateCreditResponse> Calculate([FromBody] CalculateCreditRequest request)
-        => throw new NotImplementedException();
+        => Send(request);
 
 }

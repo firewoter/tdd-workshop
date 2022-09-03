@@ -24,8 +24,8 @@ public class CreditCalculatorTests
     [ClassData(typeof(CreditCalculatorTestData))]
     public void Calculate_PointsCalculatedCorrectly(CalculateCreditRequest request, bool hasCriminalRecord, int points)
     {
-        var creditCalculator = new CreditCalculator();
-        var result = creditCalculator.Calculate(request, hasCriminalRecord);
+        //var creditCalculator = new CreditCalculator();
+        var result = CreditCalculator.Calculate(request, hasCriminalRecord);
         
         Assert.Equal(points, result.Points);
     }
@@ -34,21 +34,20 @@ public class CreditCalculatorTests
     [AutoData]
     public void Calculate_AutoData_NoException(CalculateCreditRequest request, bool hasCriminalRecord, int points)
     {
-        var creditCalculator = new CreditCalculator();
-        var result = creditCalculator.Calculate(request, hasCriminalRecord);
+        var result = CreditCalculator.Calculate(request, hasCriminalRecord);
     }
 
     [Property(Arbitrary = new [] {typeof(PostiveArbitraries)}) ]
     public bool Calculate_IsApproved_PointsGreaterThan80(CalculateCreditRequest request, bool hasCriminalRecord)
     {
-        var res = new CreditCalculator().Calculate(request, hasCriminalRecord);
+        var res = CreditCalculator.Calculate(request, hasCriminalRecord);
         return res.IsApproved == res.Points >= 80;
     }
     
     [Property]
     public bool Calculate_InterestRateCalculatedCorrectly(CalculateCreditRequest request, bool hasCriminalRecord)
     {
-        var response = new CreditCalculator().Calculate(request, hasCriminalRecord);
+        var response = CreditCalculator.Calculate(request, hasCriminalRecord);
         if (!response.IsApproved)
         {
             return response.Points < 80;

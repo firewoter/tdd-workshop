@@ -19,6 +19,9 @@ if (isDevelopment)
     });
 }
 
+builder.Services.AddMediatR(typeof(CalculateCreditHandler));
+builder.Services.AddScoped<ICriminalRecordChecker, CriminalRecordChecker>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen();
 

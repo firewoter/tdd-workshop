@@ -1,6 +1,6 @@
 namespace TddWorkshop.Domain.InstantCredit;
 
-internal class CreditCalculator
+internal static class CreditCalculator
 {
     private static int GetAgePoints(int age, CreditInfo creditInfo)
     {
@@ -59,7 +59,7 @@ internal class CreditCalculator
         return 0;
     }
 
-    public CalculateCreditResponse Calculate(CalculateCreditRequest request, bool hasCriminalRecord)
+    public static CalculateCreditResponse Calculate(CalculateCreditRequest request, bool hasCriminalRecord)
     {
         var points = 0;
         points += GetAgePoints(request.PersonalInfo.Age, request.CreditInfo);
